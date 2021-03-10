@@ -135,8 +135,16 @@ db.burger.find({$and:[{"patty": "beef"}, {"toppings": "ketchup"}]})
 **Prompt:** What query would find all burgers with a beef patty and both onions
 and pickles as toppings?
 ```
-db.burger.find({$and: [{"patty":"beef"}, {"toppings":{"toppings":"onions"},{"toppings":"pickles"}}]})
+db.burger.find({$and:
+  [
+    {"patty":"beef"},
+    {"toppings":"pickles"},
+    {"toppings":"onions"}
+  ]
+})
 ```
+
+
 
 **Prompt:** What query would find burgers with either a turkey patty or cheese?
 ```
@@ -150,8 +158,27 @@ db.burger.find( { $or: [{"patty":"turkey"}, {"cheese":"true"}]})
 **Prompt:** What query would update one burger by it's ObjectId, setting it's
 "patty" to "pork"?
 
+```
+db.inventory.updateOne(
+   { "_id": ObjectId("6048fd2e58b2028349dc2bac") },
+   {
+     $set: { "patty": "pork" },
+   }
+)
+```
+
 **Prompt:** What query would update all burgers with beef paddies to have
 cheese? (i.e. set "cheese" to true)
+
+```
+db.inventory.updateMany(
+   { "patty": "beef" },
+   {
+     $set: { "cheese": "true" },
+     $currentDate: { lastModified: true }
+   }
+)
+```
 
 ## Delete
 
@@ -159,6 +186,17 @@ cheese? (i.e. set "cheese" to true)
 
 **Prompt:** What query would delete a burger by it's ObjectId?
 
+```
+db.burger.remove({"_id": ObjectId("6048f81158b2028349dc2ba6")})
+```
+
 **Prompt:** What query would delete all veggie burgers?
+```
+db.inventory.deleteMany({"patty":"veggie"})
+```
 
 **Prompt:** What query would delete all burgers with pickles on them?
+
+```
+db.inventory.deleteMany({"toppings":"pickles"})
+```
